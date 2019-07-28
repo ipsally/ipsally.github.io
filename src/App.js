@@ -1,23 +1,36 @@
 import React, { Component } from 'react';
 import './App.css';
-import Display from './main/Display';
+import FloorPlanView from './main/FloorPlanView';
 
 class App extends Component {
   state = {
-    image: 'media/fry.png'
+    image: 'media/Main Floorplan.png', //default state could be logo image
+    extension: 'png', 
+    rotation: 0
   }
   
   imageChangeHandler = (event) => {
-    console.log(event.target.files);
-    let tmpPath =  URL.createObjectURL(event.target.files[0]);
+    let tmpPath =  URL.createObjectURL(event.target.files[0]); // create url to display image without storage
     this.setState({
-      image: tmpPath
+      image: tmpPath,
+      extension: event.target.files[0].name.split('.').pop() // parse extension
+    })
+  }
+
+  imageRotationHandler = (event) => {
+    this.setState({
+        rotation: this.state.rotation + 90
     })
   }
 
   render() {
     return (
-      <Display image={this.state.image} update={this.imageChangeHandler}/>
+      <FloorPlanView 
+        onUpload={this.imageChangeHandler} 
+        onRotate={this.imageRotationHandler} 
+        image={this.state.image} 
+        extension={this.state.extension}
+        rotation={this.state.rotation}/>
      );
   }
 }
